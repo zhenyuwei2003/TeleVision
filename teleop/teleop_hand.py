@@ -178,6 +178,16 @@ class Sim:
         self.left_root_states = self.root_states[left_idx]
         self.right_root_states = self.root_states[right_idx]
 
+        x_axis_dir = np.array([0, 0, 0, 1, 0, 0], dtype=np.float32)
+        x_axis_color = np.array([1, 0, 0], dtype=np.float32)
+        self.gym.add_lines(self.viewer, env, 1, x_axis_dir, x_axis_color)
+        y_axis_dir = np.array([0, 0, 0, 0, 1, 0], dtype=np.float32)
+        y_axis_color = np.array([0, 1, 0], dtype=np.float32)
+        self.gym.add_lines(self.viewer, env, 1, y_axis_dir, y_axis_color)
+        z_axis_dir = np.array([0, 0, 0, 0, 0, 1], dtype=np.float32)
+        z_axis_color = np.array([0, 0, 1], dtype=np.float32)
+        self.gym.add_lines(self.viewer, env, 1, z_axis_dir, z_axis_color)
+
         # create default viewer
         self.viewer = self.gym.create_viewer(self.sim, gymapi.CameraProperties())
         if self.viewer is None:
