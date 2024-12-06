@@ -45,11 +45,11 @@ class VuerTeleop:
 
     def step(self):
         head_mat, left_wrist_mat, right_wrist_mat, left_hand_mat, right_hand_mat = self.processor.process(self.tv)
-        print('head_mat', head_mat)
-        print('left_wrist_mat', left_wrist_mat)
-        print('right_wrist_mat', right_wrist_mat)
-        print('left_hand_mat', left_hand_mat)
-        print('right_hand_mat', right_hand_mat)
+        # print('head_mat', head_mat)
+        # print('left_wrist_mat', left_wrist_mat)
+        # print('right_wrist_mat', right_wrist_mat)
+        # print('left_hand_mat', left_hand_mat)
+        # print('right_hand_mat', right_hand_mat)
 
         head_rmat = head_mat[:3, :3]
 
@@ -257,8 +257,8 @@ class Sim:
 
 
 if __name__ == '__main__':
-    # teleoperator = VuerTeleop('inspire_hand.yml')
-    teleoperator = VuerTeleop('leap_hand.yml')
+    teleoperator = VuerTeleop('inspire_hand.yml')
+    # teleoperator = VuerTeleop('leap_hand.yml')
     simulator = Sim()
 
     try:
