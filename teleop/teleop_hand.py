@@ -191,16 +191,16 @@ class Sim:
         self.left_cam_offset = np.array([0, 0.033, 0])
         self.right_cam_offset = np.array([0, -0.033, 0])
         self.cam_pos = np.array([-0.6, 0, 1.6])
-        
+
         x_axis_dir = np.array([0, 0, 0, 1, 0, 0], dtype=np.float32)
         x_axis_color = np.array([1, 0, 0], dtype=np.float32)
-        self.gym.add_lines(self.viewer, env, 1, x_axis_dir, x_axis_color)
+        self.gym.add_lines(self.viewer, self.env, 1, x_axis_dir, x_axis_color)
         y_axis_dir = np.array([0, 0, 0, 0, 1, 0], dtype=np.float32)
         y_axis_color = np.array([0, 1, 0], dtype=np.float32)
-        self.gym.add_lines(self.viewer, env, 1, y_axis_dir, y_axis_color)
+        self.gym.add_lines(self.viewer, self.env, 1, y_axis_dir, y_axis_color)
         z_axis_dir = np.array([0, 0, 0, 0, 0, 1], dtype=np.float32)
         z_axis_color = np.array([0, 0, 1], dtype=np.float32)
-        self.gym.add_lines(self.viewer, env, 1, z_axis_dir, z_axis_color)
+        self.gym.add_lines(self.viewer, self.env, 1, z_axis_dir, z_axis_color)
 
         # create left 1st preson viewer
         camera_props = gymapi.CameraProperties()
