@@ -1,7 +1,7 @@
 left:
   type: vector
   urdf_path: leap_hand/leap_hand_left.urdf
-  wrist_link_name: null  # TODO
+  wrist_link_name: "base"
 
   # Target refers to the retargeting target, which is the robot hand
   target_joint_names: null
@@ -11,7 +11,7 @@ left:
 
   # Source refers to the retargeting input, which usually corresponds to the human hand
   # The joint indices of human hand joint which corresponds to each link in the target_link_names
-  target_link_human_indices: [ [ 0, 0, 0, 0 ], [ 4, 8, 12, 16 ] ]
+  target_link_human_indices: [ [ 0, 0, 0, 0 ], [ 4, 9, 14, 19 ] ]
 
   # A smaller alpha means stronger filtering, i.e. more smooth but also larger latency
   low_pass_alpha: 0.2
@@ -19,7 +19,7 @@ left:
 right:
   type: vector
   urdf_path: leap_hand/leap_hand_right.urdf
-  wrist_link_name: null  # TODO
+  wrist_link_name: "base"
 
   # Target refers to the retargeting target, which is the robot hand
   target_joint_names: null
@@ -29,7 +29,7 @@ right:
 
   # Source refers to the retargeting input, which usually corresponds to the human hand
   # The joint indices of human hand joint which corresponds to each link in the target_link_names
-  target_link_human_indices: [ [ 0, 0, 0, 0 ], [ 4, 8, 12, 16 ] ]
+  target_link_human_indices: [ [ 0, 0, 0, 0 ], [ 4, 9, 14, 19 ] ]
 
   # A smaller alpha means stronger filtering, i.e. more smooth but also larger latency
   low_pass_alpha: 0.2
