@@ -47,6 +47,10 @@ class VuerTeleop:
         self.left_retargeting = left_retargeting_config.build()
         self.right_retargeting = right_retargeting_config.build()
 
+        print("left:", self.left_retargeting.joint_names)
+        print("right:", self.right_retargeting.joint_names)
+        exit()
+
     def step(self):
         head_mat, left_wrist_mat, right_wrist_mat, left_hand_mat, right_hand_mat = self.processor.process(self.tv)
 
@@ -221,6 +225,18 @@ class Sim:
                                      self.env,
                                      gymapi.Vec3(*(self.cam_pos + self.right_cam_offset)),
                                      gymapi.Vec3(*(self.cam_pos + self.right_cam_offset + self.cam_lookat_offset)))
+
+        from dex_retargeting.seq_retarget import SeqRetargeting
+
+        urdf_joint_orders = ...
+        self.urdf2isaac_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
+        self.isaac2urdf_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
+        for urdf_idx, joint_name in enumerate(urdf_joint_orders):
+            isaac_idx = self.gym.find_actor_dof_index(self.env, self.left_handle, joint_name, gymapi.DOMAIN_ACTOR)
+            self.urdf2isaac_order[isaac_idx] = urdf_idx
+            self.isaac2urdf_order[urdf_idx] = isaac_idx
+        print(self.urdf2isaac_order)
+        print(self.isaac2urdf_order)
 
     def step(self, head_rmat, left_pose, right_pose, left_qpos, right_qpos):
 
