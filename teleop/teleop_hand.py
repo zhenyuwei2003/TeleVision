@@ -18,6 +18,10 @@ import time
 import yaml
 from multiprocessing import Array, Process, shared_memory, Queue, Manager, Event, Semaphore
 
+# hand_type = 'inspire_hand'
+hand_type = 'leap_hand'
+
+
 class VuerTeleop:
     def __init__(self, config_file_path):
         self.resolution = (720, 1280)
@@ -45,11 +49,6 @@ class VuerTeleop:
 
     def step(self):
         head_mat, left_wrist_mat, right_wrist_mat, left_hand_mat, right_hand_mat = self.processor.process(self.tv)
-        # print('head_mat', head_mat)
-        # print('left_wrist_mat', left_wrist_mat)
-        # print('right_wrist_mat', right_wrist_mat)
-        # print('left_hand_mat', left_hand_mat)
-        # print('right_hand_mat', right_hand_mat)
 
         head_rmat = head_mat[:3, :3]
 
@@ -57,8 +56,14 @@ class VuerTeleop:
                                     rotations.quaternion_from_matrix(left_wrist_mat[:3, :3])[[1, 2, 3, 0]]])
         right_pose = np.concatenate([right_wrist_mat[:3, 3] + np.array([-0.6, 0, 1.6]),
                                      rotations.quaternion_from_matrix(right_wrist_mat[:3, :3])[[1, 2, 3, 0]]])
-        left_qpos = self.left_retargeting.retarget(left_hand_mat[tip_indices])[[4, 5, 6, 7, 10, 11, 8, 9, 0, 1, 2, 3]]
-        right_qpos = self.right_retargeting.retarget(right_hand_mat[tip_indices])[[4, 5, 6, 7, 10, 11, 8, 9, 0, 1, 2, 3]]
+        if hand_type == 'inspire_hand':
+            joint_orders = [4, 5, 6, 7, 10, 11, 8, 9, 0, 1, 2, 3]
+        elif hand_type == 'leap_hand':
+            joint_orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        else:
+            raise NotImplementedError(f"Unknown hand type: {hand_type}")
+        left_qpos = self.left_retargeting.retarget(left_hand_mat[tip_indices])[joint_orders]
+        right_qpos = self.right_retargeting.retarget(right_hand_mat[tip_indices])[joint_orders]
 
         return head_rmat, left_pose, right_pose, left_qpos, right_qpos
 
@@ -109,8 +114,14 @@ class Sim:
         cube_asset = self.gym.create_box(self.sim, 0.05, 0.05, 0.05, cube_asset_options)
 
         asset_root = "../assets"
-        left_asset_path = "inspire_hand/inspire_hand_left.urdf"
-        right_asset_path = "inspire_hand/inspire_hand_right.urdf"
+        if hand_type == 'inspire_hand':
+            left_asset_path = "inspire_hand/inspire_hand_left.urdf"
+            right_asset_path = "inspire_hand/inspire_hand_right.urdf"
+        elif hand_type == 'leap_hand':
+            left_asset_path = "leap_hand/leap_hand_left.urdf"
+            right_asset_path = "leap_hand/leap_hand_right.urdf"
+        else:
+            raise NotImplementedError(f"Unknown hand type: {hand_type}")
         asset_options = gymapi.AssetOptions()
         asset_options.fix_base_link = True
         asset_options.default_dof_drive_mode = gymapi.DOF_MODE_POS
@@ -257,8 +268,12 @@ class Sim:
 
 
 if __name__ == '__main__':
-    teleoperator = VuerTeleop('inspire_hand.yml')
-    # teleoperator = VuerTeleop('leap_hand.yml')
+    if hand_type == 'inspire_hand':
+        teleoperator = VuerTeleop('inspire_hand.yml')
+    elif hand_type == 'leap_hand':
+        teleoperator = VuerTeleop('leap_hand.yml')
+    else:
+        raise NotImplementedError(f"Unknown hand type: {hand_type}")
     simulator = Sim()
 
     try:
