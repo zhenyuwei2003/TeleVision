@@ -7,5 +7,5 @@ urdf_path_right = "assets/inspire_hand/inspire_hand_right.urdf"
 robot_left = URDF.load(urdf_path_left)
 robot_right = URDF.load(urdf_path_right)
 
-print("Left Joint Names:", robot_left.joint_names)
-print("Right Joint Names:", robot_right.joint_names)
+print("Left Joint Names:", [j.name for j in robot_left.robot.joints if j.type != 'fixed'])
+print("Right Joint Names:", [j.name for j in robot_right.robot.joints if j.type != 'fixed'])
