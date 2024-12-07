@@ -18,8 +18,8 @@ import time
 import yaml
 from multiprocessing import Array, Process, shared_memory, Queue, Manager, Event, Semaphore
 
-hand_type = 'inspire_hand'
-# hand_type = 'leap_hand'
+# hand_type = 'inspire_hand'
+hand_type = 'leap_hand'
 
 
 class VuerTeleop:
@@ -223,8 +223,13 @@ class Sim:
                                      gymapi.Vec3(*(self.cam_pos + self.right_cam_offset + self.cam_lookat_offset)))
 
 
-        # urdf_joint_orders = ['base_joint', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', 'thumb_tip', 'index_tip', 'middle_tip', 'ring_tip']
-        urdf_joint_orders = ['L_thumb_proximal_yaw_joint', 'L_thumb_proximal_pitch_joint', 'L_thumb_intermediate_joint', 'L_thumb_distal_joint', 'L_index_proximal_joint', 'L_index_intermediate_joint', 'L_middle_proximal_joint', 'L_middle_intermediate_joint', 'L_ring_proximal_joint', 'L_ring_intermediate_joint', 'L_pinky_proximal_joint', 'L_pinky_intermediate_joint']
+        urdf_joint_orders = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+        # urdf_joint_orders = [
+        #     'L_thumb_proximal_yaw_joint', 'L_thumb_proximal_pitch_joint', 'L_thumb_intermediate_joint',
+        #     'L_thumb_distal_joint', 'L_index_proximal_joint', 'L_index_intermediate_joint',
+        #     'L_middle_proximal_joint', 'L_middle_intermediate_joint', 'L_ring_proximal_joint',
+        #     'L_ring_intermediate_joint', 'L_pinky_proximal_joint', 'L_pinky_intermediate_joint'
+        # ]
         self.urdf2isaac_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
         for urdf_idx, joint_name in enumerate(urdf_joint_orders):
             isaac_idx = self.gym.find_actor_dof_index(self.env, self.left_handle, joint_name, gymapi.DOMAIN_ACTOR)
