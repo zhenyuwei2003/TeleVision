@@ -234,11 +234,16 @@ class Sim:
             urdf_joint_orders = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
         else:
             raise NotImplementedError(f"Unknown hand type: {hand_type}")
-        urdf2isaac_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
+        urdf2isaac_left = np.zeros(len(urdf_joint_orders), dtype=np.int32)
+        urdf2isaac_right = np.zeros(len(urdf_joint_orders), dtype=np.int32)
         for urdf_idx, joint_name in enumerate(urdf_joint_orders):
             isaac_idx = self.gym.find_actor_dof_index(self.env, self.left_handle, joint_name, gymapi.DOMAIN_ACTOR)
-            urdf2isaac_order[isaac_idx] = urdf_idx
-        print('-' * 64, '\n', urdf2isaac_order, '\n', '-' * 64)
+            urdf2isaac_left[isaac_idx] = urdf_idx
+            isaac_idx = self.gym.find_actor_dof_index(self.env, self.right_handle, joint_name, gymapi.DOMAIN_ACTOR)
+            urdf2isaac_right[isaac_idx] = urdf_idx
+        print('-' * 64, '\n')
+        print('left:', urdf2isaac_left, 'right:', urdf2isaac_right)
+        print('\n', '-' * 64)
 
     def step(self, head_rmat, left_pose, right_pose, left_qpos, right_qpos):
 
