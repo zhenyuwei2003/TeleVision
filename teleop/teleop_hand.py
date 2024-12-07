@@ -59,7 +59,7 @@ class VuerTeleop:
         if hand_type == 'inspire_hand':
             joint_orders = [4, 5, 6, 7, 10, 11, 8, 9, 0, 1, 2, 3]
         elif hand_type == 'leap_hand':
-            joint_orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+            joint_orders = [1, 0, 2, 3, 12, 13, 14, 15, 5, 4, 6, 7, 9, 8, 10, 11]
         else:
             raise NotImplementedError(f"Unknown hand type: {hand_type}")
         left_qpos = self.left_retargeting.retarget(left_hand_mat[tip_indices])[joint_orders]
@@ -223,19 +223,22 @@ class Sim:
                                      gymapi.Vec3(*(self.cam_pos + self.right_cam_offset + self.cam_lookat_offset)))
 
 
-        urdf_joint_orders = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
-        # urdf_joint_orders = [
-        #     'L_thumb_proximal_yaw_joint', 'L_thumb_proximal_pitch_joint', 'L_thumb_intermediate_joint',
-        #     'L_thumb_distal_joint', 'L_index_proximal_joint', 'L_index_intermediate_joint',
-        #     'L_middle_proximal_joint', 'L_middle_intermediate_joint', 'L_ring_proximal_joint',
-        #     'L_ring_intermediate_joint', 'L_pinky_proximal_joint', 'L_pinky_intermediate_joint'
-        # ]
-        self.urdf2isaac_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
+        if hand_type == 'inspire_hand':
+            urdf_joint_orders = [
+                'L_thumb_proximal_yaw_joint', 'L_thumb_proximal_pitch_joint', 'L_thumb_intermediate_joint',
+                'L_thumb_distal_joint', 'L_index_proximal_joint', 'L_index_intermediate_joint',
+                'L_middle_proximal_joint', 'L_middle_intermediate_joint', 'L_ring_proximal_joint',
+                'L_ring_intermediate_joint', 'L_pinky_proximal_joint', 'L_pinky_intermediate_joint'
+            ]
+        elif hand_type == 'leaphand_hand':
+            urdf_joint_orders = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+        else:
+            raise NotImplementedError(f"Unknown hand type: {hand_type}")
+        urdf2isaac_order = np.zeros(len(urdf_joint_orders), dtype=np.int32)
         for urdf_idx, joint_name in enumerate(urdf_joint_orders):
             isaac_idx = self.gym.find_actor_dof_index(self.env, self.left_handle, joint_name, gymapi.DOMAIN_ACTOR)
-            self.urdf2isaac_order[isaac_idx] = urdf_idx
-        print(self.urdf2isaac_order)
-        exit()
+            urdf2isaac_order[isaac_idx] = urdf_idx
+        print('-' * 64, '\n', urdf2isaac_order, '\n', '-' * 64)
 
     def step(self, head_rmat, left_pose, right_pose, left_qpos, right_qpos):
 
