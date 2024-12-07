@@ -237,6 +237,8 @@ class Sim:
             self.isaac2urdf_order[urdf_idx] = isaac_idx
         print(self.urdf2isaac_order)
         print(self.isaac2urdf_order)
+        for i in range(16):
+            print(i, self.gym.get_actor_actuator_joint_name(self.env, self.left_handle, i))
         exit()
 
     def step(self, head_rmat, left_pose, right_pose, left_qpos, right_qpos):
