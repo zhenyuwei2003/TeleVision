@@ -230,7 +230,7 @@ class Sim:
                 'L_middle_proximal_joint', 'L_middle_intermediate_joint', 'L_ring_proximal_joint',
                 'L_ring_intermediate_joint', 'L_pinky_proximal_joint', 'L_pinky_intermediate_joint'
             ]
-        elif hand_type == 'leaphand_hand':
+        elif hand_type == 'leap_hand':
             urdf_joint_orders = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
         else:
             raise NotImplementedError(f"Unknown hand type: {hand_type}")
