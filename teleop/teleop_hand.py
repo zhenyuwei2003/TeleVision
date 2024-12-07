@@ -241,9 +241,7 @@ class Sim:
             urdf2isaac_left[isaac_idx] = urdf_idx
             isaac_idx = self.gym.find_actor_dof_index(self.env, self.right_handle, joint_name, gymapi.DOMAIN_ACTOR)
             urdf2isaac_right[isaac_idx] = urdf_idx
-        print('-' * 64, '\n')
-        print('left:', urdf2isaac_left, 'right:', urdf2isaac_right)
-        print('\n', '-' * 64)
+        print('-' * 64, '\n', 'left:', urdf2isaac_left, '\n', 'right:', urdf2isaac_right, '\n', '-' * 64)
 
     def step(self, head_rmat, left_pose, right_pose, left_qpos, right_qpos):
 
